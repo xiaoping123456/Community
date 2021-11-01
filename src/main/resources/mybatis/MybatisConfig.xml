@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE configuration PUBLIC
+        "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 参数设置 -->
+    <settings>
+        <!--加载日志-->
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+        <!--开启自动驼峰命名规则-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+
+
+    <!-- 映射文件，存放sql语句的配置文件 -->
+    <mappers>
+        <!--name是包名，这个包中的所有mapper.xml一次都能加载-->
+        <package name="mapper文件所在的包名"/>
+    </mappers>
+</configuration>
