@@ -4,7 +4,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sdut.community.mapper.UserMapper">
     <select id="selectUserByEmail" resultType="com.sdut.community.model.domain.User">
-        select id,username,email,phone,password,sex from user where email=#{email}
+        select id,username,email,phone,password,sex,role from user where email=#{email}
+    </select>
+
+    <select id="selectUserByUsername" resultType="com.sdut.community.model.domain.User">
+        select id,username,email,phone,password,sex,role from user where username=#{username}
+    </select>
+
+    <select id="selectUserById" resultType="com.sdut.community.model.domain.User">
+        select id,username,email,phone,password,sex,role from user where id=#{id}
     </select>
 
     <insert id="insertUser">

@@ -1,5 +1,6 @@
 package com.sdut.community.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.sdut.community.mapper.UserMapper;
 import com.sdut.community.model.domain.User;
 import com.sdut.community.model.vo.UserVo;
@@ -20,6 +21,9 @@ public class MailService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private TokenService tokenService;
 
     //application.properties中已配置的值
     @Value("${spring.mail.username}")
@@ -71,7 +75,7 @@ public class MailService {
     }
 
     /**
-     * 检验验证码是否一致
+     * 检验验证码是否一致 【注册】
      * @param userVo
      * @param session
      * @return
@@ -101,19 +105,33 @@ public class MailService {
 
     /**
      * 通过输入email查询password，然后比较两个password，如果一样，登录成功
-     * @param email
+     * @param text
      * @param password
      * @return
      */
-    public boolean loginIn(String email, String password){
-
-        User user = userMapper.selectUserByEmail(email);
-
-        if(!user.getPassword().equals(password)){
-            return false;
+    public Object loginIn(String text, String password){
+        JSONObject jsonObject = new JSONObject();
+        //判断用户是用户名登录还是密码登录
+        User user = userMapper.selectUserByEmail(text);
+        if(user == null){
+            user = userMapper.selectUserByUsername(text);
         }
-        return true;
+        if(user == null){
+            jsonObject.put("message","登录失败，用户不存在");
+            return jsonObject;
+        }else{
+            if(!user.getPassword().equals(password)){
+                jsonObject.put("message","登陆失败，密码错误");
+                return jsonObject;
+            }else{
+                String token = tokenService.getToken(user);
+                jsonObject.put("token",token);
+                jsonObject.put("user",user);
+                return jsonObject;
+            }
+        }
     }
+
 
 
 }

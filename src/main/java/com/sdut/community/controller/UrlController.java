@@ -11,4 +11,18 @@ public class UrlController {
         return "index";
     }
 
+    @RequestMapping("/tologin")
+    public String toLogin(){
+        return "/login";
+    }
+
+    @RequestMapping("/toregister")
+    public String toRegister(){
+        return "/register";
+    }
+
+    @RequestMapping("/admain")
+    public String toDomain(){
+        return "/admain";
+    }
 }

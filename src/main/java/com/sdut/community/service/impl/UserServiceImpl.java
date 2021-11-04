@@ -18,8 +18,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User selectUserByUsername(String username) {
+        return userMapper.selectUserByUsername(username);
+    }
+
+    @Override
+    public User selectUserById(int id) {
+        return userMapper.selectUserById(id);
+    }
+
+    @Override
     public int insertUser(User user) {
-        return 0;
+        return userMapper.insertUser(user);
     }
 
     @Override
