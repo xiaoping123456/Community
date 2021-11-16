@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdut.community.mapper.CommentMapper">
+    <select id="selectCommentsByBid" resultType="com.sdut.community.model.domain.Comment">
+        select * from comment where bid=#{bid} order by likenum desc
+    </select>
+
+    <insert id="insertComment">
+        insert into comment (content,pubdate,likenum,bid,uid) values (#{content},#{pubdate},#{likenum},#{bid},#{uid})
+    </insert>
+
+    <delete id="deleteComment">
+
+    </delete>
+
+    <update id="addCommentLikeNum">
+        update comment set likenum=likenum+1 where id=#{cid}
+    </update>
+
+    <insert id="addCommentLike">
+        insert into comment_like (uid,cid) values (#{uid},#{cid})
+    </insert>
+
+    <update id="reduceCommentLikeNum">
+        update comment set likenum=likenum-1 where id=#{cid}
+    </update>
+
+    <delete id="deleteCommentLike">
+        delete from comment_like where uid=#{uid} and cid=#{cid}
+    </delete>
+
+</mapper>

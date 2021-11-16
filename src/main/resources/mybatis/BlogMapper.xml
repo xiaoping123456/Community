@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sdut.community.mapper.BlogMapper">
+    <select id="selectBlogsByUid" resultType="com.sdut.community.model.domain.Blog">
+        select * from blog where uid=#{uid}
+    </select>
+
+    <insert id="insertBlog">
+        insert into blog (blog_name,content,pubdate,likenum,visits,uid) values (#{blogName},#{content},#{pubdate},#{likenum},#{visits},#{uid})
+    </insert>
+
+    <update id="updateBlog">
+
+    </update>
+
+    <delete id="deleteBlog">
+        delete from blog where id=#{id}
+    </delete>
+
+    <update id="updateBlogLikenum">
+        update blog set likenum=likenum+1 where id=#{id}
+    </update>
+    
+    <insert id="givelike">
+        insert into givelike (uid,bid) values (#{uid},#{bid})
+    </insert>
+
+    <select id="findlike" resultType="java.lang.Integer">
+        select id from givelike where uid=#{uid} and bid=#{bid}
+    </select>
+
+    <update id="reduceLikenum">
+        update blog set likenum=likenum-1 where id=#{id}
+    </update>
+
+    <delete id="deleteGiveLike">
+        delete from givelike where uid=#{uid} and bid=#{bid}
+    </delete>
+
+</mapper>

@@ -1,21 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--消息页面-->
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
-    <title>登录</title>
+    <title>XX社区</title>
     <link rel="stylesheet" href="css/bootstrap.min.css" >
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <script src="../static/js/jquery-3.3.1.js" type="application/javascript"></script>
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
 
 </head>
 <body>
-    登录<br>
-    <form th:action="@{/userLogin}" method="post">
-        邮箱:<input type="text" name="text"><br>
-        密码:<input type="text" name="password"><br>
-        <input type="submit" value="登录">
-    </form>
-    <br>
-    <a th:href="@{/toregister}">注册</a>
+
 </body>
 </html>
