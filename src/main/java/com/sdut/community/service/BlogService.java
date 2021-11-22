@@ -43,4 +43,19 @@ public interface BlogService {
      */
     public boolean cancleLike(int uid,int bid);
 
+    /**
+     * 查询当前页面所展示的blog  用户的
+     * @param currentPage
+     * @return
+     */
+    public List selectCurrentPageBlogs(int uid,int currentPage,int currentCount);
+
+    /**
+     * 查询当前页面所展示的blog  总的 按时间先后顺序
+     * @param currentPage
+     * @param currentCount
+     * @return
+     */
+    public List selectAllBlogsInCurrentPage(int currentPage,int currentCount);
+
 }

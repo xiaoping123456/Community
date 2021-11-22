@@ -1,7 +1,9 @@
 package com.sdut.community.mapper;
 
 import com.sdut.community.model.domain.Blog;
+import com.sdut.community.model.vo.SmallBlog;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -43,5 +45,40 @@ public interface BlogMapper {
      * 取消点赞，删除givelike表中的点赞关系
      */
     public int deleteGiveLike(int uid,int bid);
+
+    /**
+     * 获取用户发布的博客的总数
+     * @param uid
+     * @return
+     */
+    @Select("select count(*) from blog where uid = #{uid}")
+    public int countUserBlogs(int uid);
+
+    /**
+     * 获取全部博客的总数
+     * @return
+     */
+    @Select("select count(*) from blog")
+    public int countAllBlogs();
+
+    /**
+     * 查询当前页面的blogs  用户的
+     * @param uid
+     * @param start
+     * @param pageSize
+     * @return
+     */
+    @Select("select * from blog where uid=#{uid} limit ${start},${pageSize}")
+    public List<Blog> selectCurrentPageBlogs(int uid,int start,int pageSize);
+
+    /**
+     * 查询当前页面的blogs 总的 按时间先后顺序
+     * @param start
+     * @param pageSize
+     * @return
+     */
+    @Select("select id,blog_name,likenum,visits,uid from blog order by id desc limit ${start},${pageSize}")
+    public List<SmallBlog> selectAllBlogsInCurrentPage(int start, int pageSize);
+
 
 }

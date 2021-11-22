@@ -11,11 +11,34 @@
 
 </head>
 <body>
-    <form action="#" method="post">
-        标题: <input type="text" name="blogName">
-        内容: <input type="text" name="content">
-        pic
-        <button type="submit">发布</button>
-    </form>
+
+    标题: <input id="blogName" type="text" name="blogName" value="请输入">
+    内容: <input id="content" type="text" name="content" value="请输入">
+    <button id="submit" type="submit">发布</button>
+
+    <script>
+
+        $(document).ready(function () {
+            $("#submit").click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "blog/publish",
+                    data:{
+                        "blogName":document.getElementById("blogName").value,
+                        "content":document.getElementById("content").value
+                    },
+                    success:function (resp) {
+
+                        if(resp==true){
+                            alert("发布成功")
+                            window.location.href="http://localhost:8888";
+                        }
+                    },
+
+                })
+            })
+        })
+    </script>
+
 </body>
 </html>

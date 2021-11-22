@@ -33,8 +33,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int updateUser(User user) {
-        return 0;
+    public boolean updateUser(User user) {
+        if(userMapper.updateUser(user)!=0){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean updateUserHead(User user) {
+
+        if(userMapper.updateUserHead(user)!=0){
+            return true;
+        }
+        return false;
     }
 
     @Override

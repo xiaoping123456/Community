@@ -50,4 +50,19 @@ public class UrlController {
     public String toDomain(){
         return "/admain";
     }
+
+    @RequestMapping("/issue")
+    public String toissue(){
+        return "/issue";
+    }
+
+    @RequestMapping("/userinfo")
+    public String touserinfo(){
+        return "/userinfo";
+    }
+
+    @RequestMapping("/blog")
+    public String toblog(){
+        return "/blog";
+    }
 }

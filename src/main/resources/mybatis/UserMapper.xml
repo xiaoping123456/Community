@@ -12,11 +12,19 @@
     </select>
 
     <select id="selectUserById" resultType="com.sdut.community.model.domain.User">
-        select id,username,email,phone,password,sex,role from user where id=#{id}
+        select * from user where id=#{id}
     </select>
 
     <insert id="insertUser">
         insert into user (username,email,password) values (#{username},#{email},#{password})
     </insert>
+
+    <update id="updateUser">
+        update user set username=#{username},email=#{email},phone=#{phone},sex=#{sex},info=#{info} where id=#{id}
+    </update>
+
+    <update id="updateUserHead">
+        update user set pic=#{pic} where id=#{id}
+    </update>
 
 </mapper>

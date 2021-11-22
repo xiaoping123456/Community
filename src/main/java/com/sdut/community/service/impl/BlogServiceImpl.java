@@ -1,7 +1,9 @@
 package com.sdut.community.service.impl;
 
 import com.sdut.community.mapper.BlogMapper;
+import com.sdut.community.mapper.UserMapper;
 import com.sdut.community.model.domain.Blog;
+import com.sdut.community.model.vo.SmallBlog;
 import com.sdut.community.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,8 @@ public class BlogServiceImpl implements BlogService {
 
     @Autowired
     private BlogMapper blogMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public boolean publishBlog(Blog blog) {
@@ -75,5 +79,24 @@ public class BlogServiceImpl implements BlogService {
         //删除givelike点赞关系表中的 点赞记录
         blogMapper.deleteGiveLike(uid,bid);
         return true;
+    }
+
+    @Override
+    public List selectCurrentPageBlogs(int uid,int currentPage,int currentCount) {
+
+        int start = (currentPage-1)*currentCount;
+
+        return blogMapper.selectCurrentPageBlogs(uid,start,currentCount);
+    }
+
+    @Override
+    public List selectAllBlogsInCurrentPage(int currentPage, int currentCount) {
+        int start = (currentPage-1)*currentCount;
+        List<SmallBlog> smallBlogs =  blogMapper.selectAllBlogsInCurrentPage(start,currentCount);
+        for (SmallBlog smallBlog:smallBlogs){
+            String head = userMapper.getHeadByUid(smallBlog.getUid());
+            smallBlog.setHead(head);
+        }
+        return smallBlogs;
     }
 }

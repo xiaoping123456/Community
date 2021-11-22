@@ -1,14 +1,17 @@
 package com.sdut.community.controller;
 
 import com.auth0.jwt.JWT;
+import com.sdut.community.mapper.BlogMapper;
 import com.sdut.community.model.domain.Blog;
 import com.sdut.community.model.domain.Comment;
+import com.sdut.community.model.vo.PageMessage;
 import com.sdut.community.service.BlogService;
 import com.sdut.community.service.CommentService;
 import com.sdut.community.utils.FromTokenGet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -27,6 +30,8 @@ public class BlogController {
 
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private BlogMapper blogMapper;
 
     /**
      * 发布博客
@@ -34,13 +39,13 @@ public class BlogController {
      * @return
      * @throws ParseException
      */
-    @RequestMapping("/publish")
+    @RequestMapping(value = "/publish",method = RequestMethod.POST)
     @ResponseBody
     public boolean publishBlog(Blog blog, HttpServletRequest request) {
+        System.out.println(blog);
         //解析token，获取出id
-        String token = request.getHeader("token");
-        String userId = JWT.decode(token).getAudience().get(0);
-        blog.setUid(Integer.parseInt(userId));
+        int uid = FromTokenGet.getUidFromCookie(request);
+        blog.setUid(uid);
 
         return blogService.publishBlog(blog);
     }
@@ -54,9 +59,8 @@ public class BlogController {
     @ResponseBody
     public List showUserBlogs(HttpServletRequest request){
         //解析token，获取出id
-        String token = request.getHeader("token");
-        String userId = JWT.decode(token).getAudience().get(0);
-        return blogService.selectBlogsByUid(Integer.parseInt(userId));
+        int userId = FromTokenGet.getUidFromCookie(request);
+        return blogService.selectBlogsByUid(userId);
     }
 
     /**
@@ -69,7 +73,7 @@ public class BlogController {
     @ResponseBody
     public boolean deleteBlogById(@RequestParam("id")int id,
                                   HttpServletRequest request){
-        int uid = FromTokenGet.getUid(request);
+        int uid = FromTokenGet.getUidFromCookie(request);
         return blogService.deleteBlog(id);
     }
 
@@ -84,7 +88,7 @@ public class BlogController {
     @ResponseBody
     public boolean like(@RequestParam("bid")int bid,
                         HttpServletRequest request){
-        int uid = FromTokenGet.getUid(request);
+        int uid = FromTokenGet.getUidFromCookie(request);
         return blogService.givelike(uid,bid);
     }
 
@@ -98,7 +102,7 @@ public class BlogController {
     @ResponseBody
     public boolean cancleLike(@RequestParam("bid")int bid,
                               HttpServletRequest request){
-        int uid = FromTokenGet.getUid(request);
+        int uid = FromTokenGet.getUidFromCookie(request);
         return blogService.cancleLike(uid,bid);
     }
 
@@ -112,7 +116,7 @@ public class BlogController {
     @ResponseBody
     public boolean comment(@RequestParam("content")String content,
                            HttpServletRequest request){
-        int uid = FromTokenGet.getUid(request);
+        int uid = FromTokenGet.getUidFromCookie(request);
         Comment comment = new Comment();
         comment.setContent(content);
         comment.setUid(uid);
@@ -143,7 +147,7 @@ public class BlogController {
     public boolean likeComment(@RequestParam("cid")int cid,
                                HttpServletRequest request){
 
-        int uid = FromTokenGet.getUid(request);
+        int uid = FromTokenGet.getUidFromCookie(request);
         return commentService.likeComment(uid,cid);
     }
 
@@ -157,8 +161,75 @@ public class BlogController {
     @ResponseBody
     public boolean cancleCommentLike(@RequestParam("cid")int cid,
                                      HttpServletRequest request){
-        int uid = FromTokenGet.getUid(request);
+        int uid = FromTokenGet.getUidFromCookie(request);
         return commentService.cancleCommentLike(uid,cid);
+    }
+
+    /**
+     * 获取用户博客的页码信息
+     * @param request
+     * @return
+     */
+    @RequestMapping("/getUserBlogsPageMessage")
+    @ResponseBody
+    public PageMessage getUserBlogsPageMessage(HttpServletRequest request){
+        int uid = FromTokenGet.getUidFromCookie(request);
+        //获取总数
+        int totalCount = blogMapper.countUserBlogs(uid);
+        //每页有几个blog
+        int currentCount=8;
+        PageMessage pageMessage = new PageMessage();
+        pageMessage.setCurrentCount(currentCount);
+        pageMessage.setTotalCount(totalCount);
+        pageMessage.setTotalPage((int) Math.ceil(1.0*totalCount/currentCount));
+        return pageMessage;
+    }
+
+    /**
+     * 获取 blog页 的 页码信息
+     * @return
+     */
+    @RequestMapping("/getAllUserBlogsPageMessage")
+    @ResponseBody
+    public PageMessage getAllUserBlogsPageMessage(){
+        //获取总数
+        int totalCount = blogMapper.countAllBlogs();
+        //每页有几个blog
+        int currentCount = 10;
+        PageMessage pageMessage = new PageMessage();
+        pageMessage.setCurrentCount(currentCount);
+        pageMessage.setTotalCount(totalCount);
+        pageMessage.setTotalPage((int) Math.ceil(1.0*totalCount/currentCount));
+        return pageMessage;
+    }
+
+    /**
+     * 展示当前页的所有blog 用户页
+     * 每页8个  在方法参数中
+     * @param currentPage
+     * @param request
+     * @return
+     */
+    @RequestMapping("/showUserBlogsCurrentPage")
+    @ResponseBody
+    public List<Blog> showUserBlogsCurrentPage(@RequestParam("currentPage")Integer currentPage,
+                                               HttpServletRequest request){
+        int uid = FromTokenGet.getUidFromCookie(request);
+        List<Blog> blogs = blogService.selectCurrentPageBlogs(uid,currentPage,8);
+        return blogs;
+    }
+
+    /**
+     * 展示当前页的所有blog 总的blog
+     * 每页10个  在方法参数中
+     * @param currentPage
+     * @return
+     */
+    @RequestMapping("/showAllBlogsCurrentPage")
+    @ResponseBody
+    public List<Blog> showBlogsCurrentPage(@RequestParam("currentPage")Integer currentPage){
+        List<Blog> blogs = blogService.selectAllBlogsInCurrentPage(currentPage,10);
+        return blogs;
     }
 
 }

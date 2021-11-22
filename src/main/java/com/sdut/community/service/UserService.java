@@ -12,7 +12,9 @@ public interface UserService {
 
     public int insertUser(User user);
 
-    public int updateUser(User user);
+    public boolean updateUser(User user);
+
+    public boolean updateUserHead(User user);
 
     public int deleteUser(int id);
 

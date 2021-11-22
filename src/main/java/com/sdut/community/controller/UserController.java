@@ -1,19 +1,27 @@
 package com.sdut.community.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.auth0.jwt.JWT;
 import com.sdut.community.annotation.UserLoginToken;
+import com.sdut.community.model.domain.User;
 import com.sdut.community.model.vo.UserVo;
 import com.sdut.community.service.MailService;
 import com.sdut.community.service.UserService;
+import com.sdut.community.utils.FromTokenGet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -62,8 +70,7 @@ public class UserController {
      * @return
      */
     @RequestMapping("/userLogin")
-    @ResponseBody
-    public Object login(@RequestParam("text")String text,
+    public String login(@RequestParam("text")String text,
                         @RequestParam("password")String password,
                         HttpServletRequest request,
                         HttpServletResponse response){
@@ -77,13 +84,20 @@ public class UserController {
             response.addCookie(cookie);
             request.getSession().setAttribute("token",token);
         }
-        return jsonObject;
+        return "redirect:/";
     }
 
+    /**
+     * 退出登录
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping("/logout")
     public String logout(HttpServletRequest request,HttpServletResponse response){
         //移除session
         request.getSession().removeAttribute("user");
+        request.getSession().removeAttribute("token");
         //移除cookie
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie:cookies){
@@ -95,10 +109,80 @@ public class UserController {
                 break;
             }
         }
-        return "index";
+        return "redirect:/";
     }
 
+    /**
+     * 查询用户信息
+     * @param request
+     * @return
+     */
+    @RequestMapping("/findUser")
+    @ResponseBody
+    public User findUserById(HttpServletRequest request){
+        int uid = FromTokenGet.getUidFromCookie(request);
+        return userService.selectUserById(uid);
+    }
 
+    /**
+     * 修改用户信息
+     * @param user
+     * @param request
+     * @return
+     */
+    @RequestMapping("/updateUser")
+    @ResponseBody
+    public boolean updateUser(User user,
+                              HttpServletRequest request){
+        int uid = FromTokenGet.getUidFromCookie(request);
+        user.setId(uid);
+        return userService.updateUser(user);
+    }
+
+    /**
+     * 上传头像
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/multifileUpload",method = RequestMethod.POST)
+    @ResponseBody
+    public String fileUpload(@RequestParam("files")MultipartFile file,
+                             HttpServletRequest request){
+        if(file.isEmpty()){
+            return "false";
+        }
+        //得到上传时的文件名
+        String fileName = file.getOriginalFilename();
+        int size = (int) file.getSize();
+        System.out.println(fileName+"-->"+size);
+
+        //上传的文件要存储的地址
+        String path = "E:/FileTest/community/";
+        File dest = new File(path + fileName);
+        //判断父目录是否存在
+        if(dest.getParentFile().exists()){  //getParentFile() : 获得父目录
+            dest.getParentFile().mkdir();
+        }
+        try{
+            //transferTo(dest)方法将上传文件写到服务器上指定的文件
+            file.transferTo(dest);
+
+            //文件的映射地址
+            String urlPath = null;
+            urlPath = "http://localhost:8888/userInfo/img/" + fileName;
+            System.out.println(urlPath);
+            //把文件映射地址保存到用户信息表
+            User user = new User();
+            user.setId(FromTokenGet.getUidFromCookie(request));
+            user.setPic(urlPath);
+            userService.updateUserHead(user);
+
+            return urlPath;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "false";
+        }
+    }
 
 //    @UserLoginToken
 //    @GetMapping("/getMessage")
