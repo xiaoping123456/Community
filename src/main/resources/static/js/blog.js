@@ -78,7 +78,9 @@ function eachgetData(CP){
                     "                    </a>\n" +
                     "                </div>\n" +
                     "                <div class=\"media-body\">\n <br>" +
+                    "                    <a href=\""+"http://localhost:8888/blogInfo/"+resp[i].id+"\">\n" +
                     "                    <h4 class=\"media-heading\">"+resp[i].blogName+"</h4>\n" +
+                    "                    </a>\n" +
                     "                    浏览量:<span>"+resp[i].visits+"</span> 点赞量:<span>"+resp[i].likenum+"</span>" +
                     "                </div>\n" +
                     "            </div>\n" +

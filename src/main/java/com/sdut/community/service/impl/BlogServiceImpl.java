@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -97,6 +98,43 @@ public class BlogServiceImpl implements BlogService {
             String head = userMapper.getHeadByUid(smallBlog.getUid());
             smallBlog.setHead(head);
         }
+        return smallBlogs;
+    }
+
+    @Override
+    public Blog selectBlogByBid(int bid) {
+        return blogMapper.selectBlogBybid(bid);
+    }
+
+    @Override
+    public List showHotBlogs() {
+        List<SmallBlog> smallBlogs = blogMapper.selectHotBlogs();
+        for (SmallBlog smallBlog:smallBlogs){
+            String head = userMapper.getHeadByUid(smallBlog.getUid());
+            smallBlog.setHead(head);
+        }
+        return smallBlogs;
+    }
+
+    @Override
+    public List getUserLikedBlogs(int uid,int currentPage,int pageSize) {
+        List<SmallBlog> smallBlogs = new ArrayList<>();
+
+        //获取bid集合
+        int start = (currentPage-1)*pageSize;
+        List<Integer> bids = blogMapper.getLikedBids(uid,start,pageSize);
+        //把blogName,bid,likenum,visits,pic 放入smallBlog中
+        for (Integer bid:bids){
+            SmallBlog smallBlog = new SmallBlog();
+            smallBlog.setId(bid);
+            Blog blog = blogMapper.selectBlogBybid(bid);
+            smallBlog.setBlogName(blog.getBlogName());
+            smallBlog.setLikenum(blog.getLikenum());
+            smallBlog.setVisits(blog.getVisits());
+            smallBlog.setHead(userMapper.getHeadByUid(uid));
+            smallBlogs.add(smallBlog);
+        }
+
         return smallBlogs;
     }
 }

@@ -148,6 +148,8 @@ public class UserController {
     @ResponseBody
     public String fileUpload(@RequestParam("files")MultipartFile file,
                              HttpServletRequest request){
+        int uid = FromTokenGet.getUidFromCookie(request);
+
         if(file.isEmpty()){
             return "false";
         }
@@ -157,11 +159,18 @@ public class UserController {
         System.out.println(fileName+"-->"+size);
 
         //上传的文件要存储的地址
-        String path = "E:/FileTest/community/";
-        File dest = new File(path + fileName);
+        String storagePathPrefix = "E:/FileTest/community/";
+        Long time = System.currentTimeMillis();
+        System.out.println(time);
+        System.out.println(uid);
+        //重命名
+        String newName = uid + "" + time + fileName;
+        System.out.println(newName);
+        String path = storagePathPrefix + uid + "/headpic/";
+        File dest = new File(path + newName);
         //判断父目录是否存在
-        if(dest.getParentFile().exists()){  //getParentFile() : 获得父目录
-            dest.getParentFile().mkdir();
+        if(!dest.getParentFile().exists()){  //getParentFile() : 获得父目录
+            dest.getParentFile().mkdirs();
         }
         try{
             //transferTo(dest)方法将上传文件写到服务器上指定的文件
@@ -169,7 +178,9 @@ public class UserController {
 
             //文件的映射地址
             String urlPath = null;
-            urlPath = "http://localhost:8888/userInfo/img/" + fileName;
+
+            String urlPrefix = "http://localhost:8888/community/file/";
+            urlPath = urlPrefix + uid+ "/headpic/" + newName;
             System.out.println(urlPath);
             //把文件映射地址保存到用户信息表
             User user = new User();

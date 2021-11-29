@@ -14,6 +14,9 @@ public class User {
     private String sex;
     private String info;
     private String pic;
+
+    private String likeBlogs;   //用户喜欢的blog的bid集合 ","分割
+
     //用户权限
     private String role;
 }

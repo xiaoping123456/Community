@@ -17,7 +17,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
         //文件地址映射
         String uploadPath = "E:/FileTest/community/";
-        registry.addResourceHandler("/userInfo/img/**").addResourceLocations("file:" + uploadPath);
+        registry.addResourceHandler("/community/file/**").addResourceLocations("file:" + uploadPath);
     }
 
     @Override

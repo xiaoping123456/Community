@@ -62,6 +62,14 @@ public interface BlogMapper {
     public int countAllBlogs();
 
     /**
+     * 获取用户点赞的博客的总数
+     * @param uid
+     * @return
+     */
+    @Select("select count(*) from givelike where uid=#{uid}")
+    public int countLikedFromUser(int uid);
+
+    /**
      * 查询当前页面的blogs  用户的
      * @param uid
      * @param start
@@ -80,5 +88,27 @@ public interface BlogMapper {
     @Select("select id,blog_name,likenum,visits,uid from blog order by id desc limit ${start},${pageSize}")
     public List<SmallBlog> selectAllBlogsInCurrentPage(int start, int pageSize);
 
+    /**
+     * 根据bid查询blog
+     * @param bid
+     * @return
+     */
+    @Select("select * from blog where id=#{bid}")
+    public Blog selectBlogBybid(int bid);
+
+    /**
+     * 根据点赞数 降序查询10个
+     * @return
+     */
+    @Select("select id,blog_name,likenum,visits,uid from blog order by likenum desc limit 10")
+    public List<SmallBlog> selectHotBlogs();
+
+    /**
+     * 获取用户点赞的blog的bid集合
+     * @param uid
+     * @return
+     */
+    @Select("select bid from givelike where uid=#{uid} limit ${start},${pageSize}")
+    public List<Integer> getLikedBids(int uid,int start,int pageSize);
 
 }

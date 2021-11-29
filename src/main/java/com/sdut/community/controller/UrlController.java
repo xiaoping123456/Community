@@ -1,20 +1,27 @@
 package com.sdut.community.controller;
 
 import com.auth0.jwt.JWT;
+import com.sdut.community.model.domain.Blog;
 import com.sdut.community.model.domain.User;
+import com.sdut.community.service.BlogService;
 import com.sdut.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 
 @Controller
 public class UrlController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private BlogService blogService;
 
     @RequestMapping("/")
     public String toIndex(HttpServletRequest request){
@@ -64,5 +71,19 @@ public class UrlController {
     @RequestMapping("/blog")
     public String toblog(){
         return "/blog";
+    }
+
+    /**
+     * 跳转到blog详情页
+     */
+    @RequestMapping("/blogInfo/{bid}")
+    public String showBlogInfoByBid(@PathVariable("bid")Integer bid,
+                                    Model model){
+        Blog blog = blogService.selectBlogByBid(bid);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = simpleDateFormat.format(blog.getPubdate());
+        model.addAttribute("blog",blog);
+        model.addAttribute("publishDate",date);
+        return "/blogInfo";
     }
 }

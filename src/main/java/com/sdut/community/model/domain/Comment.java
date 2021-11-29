@@ -14,7 +14,5 @@ public class Comment {
     private Integer likenum;        //点赞数
 
     private Integer bid;            //外键，blog id
-    private Integer uid;            //外键，user id
-
 
 }

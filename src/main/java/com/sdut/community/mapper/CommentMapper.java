@@ -1,9 +1,13 @@
 package com.sdut.community.mapper;
 
 import com.sdut.community.model.domain.Comment;
+import com.sdut.community.model.vo.CommentShow;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface CommentMapper {
@@ -35,5 +39,20 @@ public interface CommentMapper {
      * 评论点赞表 删除记录
      */
     public int deleteCommentLike(int uid,int cid);
+
+    /**
+     * 获取最大的id
+     * @return
+     */
+    @Select("select max(id) from comment")
+    public int getMaxId();
+
+    @Insert("insert into comment_user (cid,uid) values (#{cid},#{uid})")
+    public int insertCommentLink(Map map);
+
+    @Select("select `comment`.content,comment_user.uid,`user`.pic FROM comment,user,comment_user " +
+            "where comment.id=comment_user.cid and comment_user.uid=`user`.id and bid=#{bid} " +
+            "order by likenum desc")
+    public List<CommentShow> selectCommentShow(int bid);
 
 }

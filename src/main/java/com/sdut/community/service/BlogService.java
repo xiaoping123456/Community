@@ -1,6 +1,7 @@
 package com.sdut.community.service;
 
 import com.sdut.community.model.domain.Blog;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -57,5 +58,23 @@ public interface BlogService {
      * @return
      */
     public List selectAllBlogsInCurrentPage(int currentPage,int currentCount);
+
+    /**
+     * 查询blod信息 根据bid
+     * @param bid
+     * @return
+     */
+    public Blog selectBlogByBid(int bid);
+
+    /**
+     * 展示热门的blog 10个 按点赞量排序
+     * @return
+     */
+    public List showHotBlogs();
+
+    /**
+     * 获取用户点赞过的blogs集合
+     */
+    public List getUserLikedBlogs(int uid,int currentPage,int pageSize);
 
 }

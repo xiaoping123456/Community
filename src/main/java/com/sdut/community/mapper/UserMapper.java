@@ -30,4 +30,5 @@ public interface UserMapper {
     @Select("select pic from user where id=#{uid}")
     public String getHeadByUid(int uid);
 
+
 }

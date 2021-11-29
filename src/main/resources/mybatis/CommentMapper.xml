@@ -8,7 +8,7 @@
     </select>
 
     <insert id="insertComment">
-        insert into comment (content,pubdate,likenum,bid,uid) values (#{content},#{pubdate},#{likenum},#{bid},#{uid})
+        insert into comment (content,pubdate,likenum,bid) values (#{content},#{pubdate},#{likenum},#{bid})
     </insert>
 
     <delete id="deleteComment">

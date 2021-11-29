@@ -10,10 +10,8 @@ import com.sdut.community.service.CommentService;
 import com.sdut.community.utils.FromTokenGet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
@@ -93,6 +91,25 @@ public class BlogController {
     }
 
     /**
+     * 判断用户是否已点赞
+     * true 已点赞  false 未点赞
+     * @param bid
+     * @param request
+     * @return
+     */
+    @RequestMapping("/judgeUserLiked")
+    @ResponseBody
+    public boolean judgeUserLiked(@RequestParam("bid")int bid,
+                                  HttpServletRequest request){
+        int uid = FromTokenGet.getUidFromCookie(request);
+        if (blogMapper.findlike(uid,bid)==null){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    /**
      * 取消点赞
      * @param bid
      * @param request
@@ -106,6 +123,7 @@ public class BlogController {
         return blogService.cancleLike(uid,bid);
     }
 
+
     /**
      * 发布评论
      * @param content
@@ -115,13 +133,11 @@ public class BlogController {
     @RequestMapping("/comment")
     @ResponseBody
     public boolean comment(@RequestParam("content")String content,
+                           @RequestParam("bid")Integer bid,
                            HttpServletRequest request){
         int uid = FromTokenGet.getUidFromCookie(request);
-        Comment comment = new Comment();
-        comment.setContent(content);
-        comment.setUid(uid);
 
-        return commentService.comment(comment);
+        return commentService.comment(content,bid,uid);
     }
 
     /**
@@ -133,7 +149,7 @@ public class BlogController {
     @ResponseBody
     public List showComments(@RequestParam("bid")int bid){
 
-        return commentService.findCommentsByBid(bid);
+        return commentService.selectCommentShow(bid);
     }
 
     /**
@@ -204,6 +220,25 @@ public class BlogController {
     }
 
     /**
+     * 获取 用户点赞过的blogs 的 页码信息
+     * @return
+     */
+    @RequestMapping("/getLikedBlogsPageMessage")
+    @ResponseBody
+    public PageMessage getAllUserBlogsPageMessage(HttpServletRequest request){
+        //获取总数
+        int uid = FromTokenGet.getUidFromCookie(request);
+        int totalCount = blogMapper.countLikedFromUser(uid);
+        //每页有几个blog
+        int currentCount = 6;
+        PageMessage pageMessage = new PageMessage();
+        pageMessage.setCurrentCount(currentCount);
+        pageMessage.setTotalCount(totalCount);
+        pageMessage.setTotalPage((int) Math.ceil(1.0*totalCount/currentCount));
+        return pageMessage;
+    }
+
+    /**
      * 展示当前页的所有blog 用户页
      * 每页8个  在方法参数中
      * @param currentPage
@@ -220,6 +255,21 @@ public class BlogController {
     }
 
     /**
+     * 展示用户点赞的blog 当前页
+     * 每页6个  在方法参数中
+     * @param currentPage
+     * @return
+     */
+    @RequestMapping("/showLikedBlogsCurrentPage")
+    @ResponseBody
+    public List showLikedBlogsCurrentPage(@RequestParam("currentPage")Integer currentPage,
+                                          HttpServletRequest request){
+        int uid = FromTokenGet.getUidFromCookie(request);
+        return blogService.getUserLikedBlogs(uid,currentPage,6);
+    }
+
+
+    /**
      * 展示当前页的所有blog 总的blog
      * 每页10个  在方法参数中
      * @param currentPage
@@ -231,5 +281,15 @@ public class BlogController {
         List<Blog> blogs = blogService.selectAllBlogsInCurrentPage(currentPage,10);
         return blogs;
     }
+
+
+    @RequestMapping("/hotBlogs")
+    @ResponseBody
+    public List showHotBlogs(){
+        List blogs = blogService.showHotBlogs();
+        return blogs;
+    }
+
+
 
 }

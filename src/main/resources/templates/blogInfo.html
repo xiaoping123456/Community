@@ -2,11 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
-    <title>故事汇</title>
+    <title>XX社区</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css" >
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/mycss.css">
-    <script src="../static/js/jquery-3.3.1.js" type="application/javascript"></script>
+    <script src="/js/jquery-3.3.1.js" type="application/javascript"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
 
 </head>
@@ -21,14 +21,14 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="http://localhost:8888/">首页</a>
+            <a class="navbar-brand" href="#">Brand</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <!--                <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>-->
-                <li><a href="/blog">故事圈</a></li>
+                <li><a href="/blog">Link</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -53,7 +53,7 @@
                 <li th:if="${session.user!=null}" class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">个人 <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="userinfo">个人资料</a></li>
+                        <li><a href="/userinfo">个人资料</a></li>
                         <li><a href="#">消息中心</a></li>
                         <li><a href="/issue">发布文案</a></li>
                         <li role="separator" class="divider"></li>
@@ -66,57 +66,52 @@
     </div><!-- /.container-fluid -->
 </nav>
 
-<div class="panel panel-default" >
-    <div class="panel-heading">热门故事榜</div>
-    <div id="hot">
-        <div class="panel-body otherHeadPic">
-            <div class="media">
-                <div class="media-left media-middle">
-                    <a href="#">
-                        <img class="media-object" src="..." alt="...">
-                    </a>
-                </div>
-                <div class="media-body">
-                    <h4 class="media-heading">Middle aligned media</h4>
-                    <span>浏览量:</span><span>点赞量:</span>
+    <!--blog详细信息-->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            故事详情
+        </div>
+        <div class="panel-body">
+            <h2 id="blogName" th:text="${blog.getBlogName()}"></h2>
+        </div>
+        <div class="panel-body">
+            <p th:text="${blog.getContent()}" class="content-font"></p>
+        </div>
+        <div class="panel-body" align="right">
+            发布时间 : <span th:text="${publishDate}" ></span><span>&nbsp&nbsp&nbsp&nbsp</span>
+        </div>
+        <div class="panel-body" align="right">
+            <span>
+                <a class=" glyphicon glyphicon-thumbs-up " id="like" style="font-size: 35px;"></a>
+                <span th:text="${blog.getLikenum()}"></span>
+                <span>&nbsp&nbsp&nbsp&nbsp</span>
+            </span>
+
+        </div>
+    </div>
+    <!--评论区-->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            评论区
+            <span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a class="glyphicon glyphicon-edit" id="comment">评论</a></span>
+        </div>
+        <div id="commentArea">
+            <div class="panel-body otherHeadPic">
+                <div class="media">
+                    <div class="media-left media-middle">
+                        <a href="#">
+                            <img class="media-object" src="..." alt="...">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading">Middle aligned media</h4>
+                        <span>浏览量:</span><span>点赞量:</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 </body>
-
-<script>
-    $(function () {
-        datehtml="";
-        $.ajax({
-            type:"GET",
-            url:"blog/hotBlogs",
-            success:function (resp) {
-                console.log(resp)
-                var i;
-                for(i=0;i<resp.length;i++){
-                    datehtml=datehtml+"<div class=\"panel-body otherHeadPic\">\n" +
-                        "            <div class=\"media\">\n" +
-                        "                <div class=\"media-left media-middle\">\n" +
-                        "                    <a href=\"#\">\n" +
-                        "                        <img class=\"media-object img-circle\" src=\""+resp[i].head+"\" alt=\"...\">\n" +
-                        "                    </a>\n" +
-                        "                </div>\n" +
-                        "                <div class=\"media-body\">\n <br>" +
-                        "                    <a href=\""+"http://localhost:8888/blogInfo/"+resp[i].id+"\">\n" +
-                        "                    <h4 class=\"media-heading\">"+resp[i].blogName+"</h4>\n" +
-                        "                    </a>\n" +
-                        "                    浏览量:<span>"+resp[i].visits+"</span> 点赞量:<span>"+resp[i].likenum+"</span>" +
-                        "                </div>\n" +
-                        "            </div>\n" +
-                        "        </div>"
-                }
-                $("#hot").html(datehtml);
-            }
-        })
-    })
-</script>
-
+<script src="/js/blogInfo.js"></script>
 </html>
