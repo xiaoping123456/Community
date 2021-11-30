@@ -4,6 +4,7 @@ import com.sdut.community.model.domain.Blog;
 import com.sdut.community.model.vo.SmallBlog;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -110,5 +111,15 @@ public interface BlogMapper {
      */
     @Select("select bid from givelike where uid=#{uid} limit ${start},${pageSize}")
     public List<Integer> getLikedBids(int uid,int start,int pageSize);
+
+    /**
+     * 获取所有的bid
+     * @return
+     */
+    @Select("select id from blog")
+    public List<Integer> getAllBids();
+
+    @Update("update blog set visits=#{count} where id=#{bid}")
+    public int updateBlogVisits(int count,int bid);
 
 }
