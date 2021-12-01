@@ -1,6 +1,7 @@
 package com.sdut.community.controller;
 
 import com.auth0.jwt.JWT;
+import com.sdut.community.annotation.UserLoginToken;
 import com.sdut.community.model.domain.Blog;
 import com.sdut.community.model.domain.User;
 import com.sdut.community.service.BlogService;
@@ -58,6 +59,7 @@ public class UrlController {
         return "/admain";
     }
 
+    @UserLoginToken
     @RequestMapping("/issue")
     public String toissue(){
         return "/issue";
@@ -86,4 +88,5 @@ public class UrlController {
         model.addAttribute("publishDate",date);
         return "/blogInfo";
     }
+
 }

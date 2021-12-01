@@ -28,7 +28,7 @@ public class VisitsScheduleTask {
         //获取所有的bid集合
         List<Integer> bids = blogMapper.getAllBids();
         for (Integer bid:bids){
-            int count =0;
+            int count = 0;
             if(redisUtils.get(bid+"-visits")!=null){
                 count = Integer.parseInt((String) redisUtils.get(bid+"-visits"));
                 //更改mysql中的visits

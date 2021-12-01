@@ -55,12 +55,22 @@
     </div><!-- /.container-fluid -->
 </nav>
 
-    标题: <input id="blogName" type="text" name="blogName" value="请输入">
-    内容: <input id="content" type="text" name="content" value="请输入">
-    <button id="submit" type="submit">发布</button>
-
-
-
+<div class="panel panel-default">
+    <div class="panel-heading">发布故事</div>
+    <div class="panel-body">
+        标题: <input id="blogName" type="text" name="blogName" value="">
+    </div>
+    <div class="panel-body">
+        <form role="form">
+            <div class="form-group">
+                内容: <textarea class="form-control" rows="10" id="content" type="text" name="content"></textarea>
+            </div>
+        </form>
+    </div>
+    <div class="panel-body">
+        <button id="submit" type="submit">发布</button>
+    </div>
+</div>
 
 
 

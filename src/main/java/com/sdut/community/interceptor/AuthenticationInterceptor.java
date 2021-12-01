@@ -14,6 +14,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
@@ -25,7 +26,22 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object object) throws Exception {
-        String token = httpServletRequest.getHeader("token");// 从 http 请求头中取出 token
+        // 从 http 请求头中取出 token
+//        String token = httpServletRequest.getHeader("token");
+        //从cookie中取出token
+        String token = null;
+        Cookie[] cookies = httpServletRequest.getCookies();
+        if(cookies != null && cookies.length!=0){
+            for (Cookie cookie : cookies){
+                if(cookie.getName().equals("token")){
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+
+
         // 如果不是映射到方法直接通过
         if (!(object instanceof HandlerMethod)) {
             return true;

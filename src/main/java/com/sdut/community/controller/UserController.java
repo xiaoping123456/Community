@@ -113,6 +113,22 @@ public class UserController {
     }
 
     /**
+     * 判断用户是否已登录
+     * session 是否有 user
+     * @param request
+     * @return
+     */
+    @RequestMapping("/judgeLogin")
+    @ResponseBody
+    public Boolean judgeLogin(HttpServletRequest request){
+        if(request.getSession().getAttribute("user")==null){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    /**
      * 查询用户信息
      * @param request
      * @return

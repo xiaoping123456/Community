@@ -18,47 +18,86 @@ $(function () {
 
     //点赞
     $("#like").click(function () {
-        console.log(bid)
+
         $.ajax({
             type:"GET",
-            url:"/blog/like",
+            url:"/judgeLogin",
             data:{
-                "bid":bid
+
             },
             success:function (resp) {
-                console.log(resp);
-                if (resp==true){
-                    alert("点赞成功")
-                    location.reload();
-                }else{
-                    alert("您已点赞")
+                if (resp==false){
+                    var r = confirm("您未登录，点击确认进行登录");
+                    if (r==true){
+                        window.location.href="http://localhost:8888/tologin";
+                    }
+                }else if (resp==true){
+
+                    $.ajax({
+                        type:"GET",
+                        url:"/blog/like",
+                        data:{
+                            "bid":bid
+                        },
+                        success:function (resp) {
+                            console.log(resp);
+                            if (resp==true){
+                                alert("点赞成功")
+                                location.reload();
+                            }
+                            else{
+                                alert("您已点赞")
+                            }
+                        }
+                    })
                 }
             }
         })
+
+
+
     })
 
     //评论
     $("#comment").click(function () {
-        var commentContent = prompt("请输入您的评论");
-        if(commentContent == null || commentContent == ""){
 
-        }else{
-            $.ajax({
-                type:"GET",
-                url:"/blog/comment",
-                data:{
-                    "content":commentContent,
-                    "bid":bid
-                },
-                success:function (resp) {
-                    console.log(resp)
-                    if (resp==true){
-                        alert("评论成功")
-                        location.reload();
+        $.ajax({
+            type: "GET",
+            url: "/judgeLogin",
+            data: {},
+            success:function (resp) {
+                if (resp==false){
+                    var r = confirm("您未登录，点击确认进行登录");
+                    if (r==true){
+                        window.location.href="http://localhost:8888/tologin";
+                    }
+                }else if (resp=true){
+                    var commentContent = prompt("请输入您的评论");
+                    if(commentContent == null || commentContent == ""){
+
+                    }else {
+                        $.ajax({
+                            type: "GET",
+                            url: "/blog/comment",
+                            data: {
+                                "content": commentContent,
+                                "bid": bid
+                            },
+                            success: function (resp) {
+                                console.log(resp)
+                                if (resp == true) {
+                                    alert("评论成功")
+                                    location.reload();
+                                }
+                            }
+                        })
                     }
                 }
-            })
-        }
+            }
+        })
+
+
+
     })
 
     //评论区

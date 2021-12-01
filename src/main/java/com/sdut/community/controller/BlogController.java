@@ -1,6 +1,7 @@
 package com.sdut.community.controller;
 
 import com.auth0.jwt.JWT;
+import com.sdut.community.annotation.UserLoginToken;
 import com.sdut.community.mapper.BlogMapper;
 import com.sdut.community.model.domain.Blog;
 import com.sdut.community.model.domain.Comment;
@@ -37,6 +38,7 @@ public class BlogController {
      * @return
      * @throws ParseException
      */
+    @UserLoginToken
     @RequestMapping(value = "/publish",method = RequestMethod.POST)
     @ResponseBody
     public boolean publishBlog(Blog blog, HttpServletRequest request) {
@@ -82,6 +84,7 @@ public class BlogController {
      * @param request
      * @return
      */
+    @UserLoginToken
     @RequestMapping("/like")
     @ResponseBody
     public boolean like(@RequestParam("bid")int bid,
@@ -130,6 +133,7 @@ public class BlogController {
      * @param request
      * @return
      */
+    @UserLoginToken
     @RequestMapping("/comment")
     @ResponseBody
     public boolean comment(@RequestParam("content")String content,

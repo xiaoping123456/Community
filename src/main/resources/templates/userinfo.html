@@ -56,141 +56,171 @@
 </nav>
 
 <div class="container-fluid">
-    <!--个人信息-->
-    <div class="panel panel-default">
-        <div class="panel-heading">个人资料</div>
+    <div class="row">
+        <div class="col-md-2">
+            <!--导航条-->
+            <div class="container">
+                <div class="row">
+                    <div class="span8">
+                        <ul class="nav nav-tabs nav-stacked">
+                            <li id="personinfo-li" class="active"><a href="#" id="personinfo-click">个人资料</a></li>
+                            <li id="mystory-li"><a href="#" id="mystory-click">我的故事</a></li>
+                            <li id="mylike-li"><a href="#" id="mylike-click" onclick="getLiked()">我喜欢 </a></li>
 
-        <!--头像-->
-        <div class="panel-body headpic" id="pic">
-            <h4>头像</h4>
-            <img id="headpic" src="http://localhost:8888/userInfo/img/default.jpg" alt="..." class="img-circle">
-            <button id="choicehead">更换头像</button>
-
-            <form enctype="multipart/form-data">
-                <input id="files" name="files" type="file" style="display: none" />
-                <input id="upload-btn" type="button" value="上传" style="display: none"/>
-                <input id="cancle-upload" type="button" value="取消" style="display: none"/>
-            </form>
-            <progress id="jindu" style="display: none"></progress>
-        </div>
-
-        <div class="panel-body">
-            用户昵称：<input id="username" readonly="readonly">
-        </div>
-        <div class="panel-body">
-            邮箱&nbsp&nbsp：<input id="email" readonly="readonly">
-        </div>
-        <div class="panel-body">
-            手机号&nbsp：<input id="phone" readonly="readonly">
-        </div>
-        <div class="panel-body">
-            个性标签：<input id="info" readonly="readonly">
-        </div>
-        <div class="panel-body">
-            性别&nbsp&nbsp：
-            <span>
-                <div class="btn-group" data-toggle="buttons" id="sex">
-                    <label class="radio-inline">
-                        <input type="radio" name="a" id="sex-men" value="男" disabled="disabled"/>男
-                    </label>
-                    <label class="radio-inline">
-                        <input type="radio" name="a" id="sex-women" value="女" disabled="disabled"/>女
-                    </label>
-                </div>
-            </span>
-        </div>
-        <br>
-        <button id="edit">编辑</button>
-        <button id="save">保存</button>
-        <button id="cancle">取消</button>
-    </div>
-
-    <!--我的故事-->
-    <div class="panel panel-default" >
-        <div class="panel-heading">我的故事</div>
-        <div id="test">
-            <div class="panel-body">
-                <div class="media">
-                    <div class="media-left media-middle">
-                        <a href="#">
-                            <img class="media-object" src="..." alt="...">
-                        </a>
-                    </div>
-                    <div class="media-body">
-                        <h4 class="media-heading">Middle aligned media</h4>
-                        <span>浏览量:</span><span>点赞量:</span>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
-        <!--分页-->
-        <nav aria-label="Page navigation">
-            <ul class="pagination" id="eachdata">
-                <li>
-                    <a href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li>
-                    <a href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        <div class="col-md-10">
+            <!--个人信息-->
+            <div id="personinfo">
+                <div class="panel panel-default">
+                    <div class="panel-heading">个人资料</div>
 
-        <!--我点赞过的-->
-        <div class="panel panel-default">
-            <div class="panel-heading">我喜欢的故事</div>
-            <div id="myLiked">
-                <div class="panel-body">
-                    <div class="media">
-                        <div class="media-left media-middle">
-                            <a href="#">
-                                <img class="media-object" src="..." alt="...">
-                            </a>
-                        </div>
-                        <div class="media-body">
-                            <h4 class="media-heading">Middle aligned media</h4>
-                            <span>浏览量:</span><span>点赞量:</span>
-                        </div>
+                    <!--头像-->
+                    <div class="panel-body headpic" id="pic">
+                        <h4>头像</h4>
+                        <img id="headpic" src="http://localhost:8888/userInfo/img/default.jpg" alt="..." class="img-circle">
+                        <button id="choicehead">更换头像</button>
+
+                        <form enctype="multipart/form-data">
+                            <input id="files" name="files" type="file" style="display: none" />
+                            <input id="upload-btn" type="button" value="上传" style="display: none"/>
+                            <input id="cancle-upload" type="button" value="取消" style="display: none"/>
+                        </form>
+                        <progress id="jindu" style="display: none"></progress>
                     </div>
+
+                    <div class="panel-body">
+                        用户昵称：<input id="username" readonly="readonly">
+                    </div>
+                    <div class="panel-body">
+                        邮箱&nbsp&nbsp：<input id="email" readonly="readonly">
+                    </div>
+                    <div class="panel-body">
+                        手机号&nbsp：<input id="phone" readonly="readonly">
+                    </div>
+                    <div class="panel-body">
+                        个性标签：<input id="info" readonly="readonly">
+                    </div>
+                    <div class="panel-body">
+                        性别&nbsp&nbsp：
+                        <span>
+                    <div class="btn-group" data-toggle="buttons" id="sex">
+                        <label class="radio-inline">
+                            <input type="radio" name="a" id="sex-men" value="男" disabled="disabled"/>男
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="a" id="sex-women" value="女" disabled="disabled"/>女
+                        </label>
+                    </div>
+                </span>
+                    </div>
+                    <br>
+                    <button id="edit">编辑</button>
+                    <button id="save">保存</button>
+                    <button id="cancle">取消</button>
                 </div>
             </div>
-            <!--分页-->
-            <nav aria-label="Page navigation">
-                <ul class="pagination" id="eachdataLiked">
-                    <li>
-                        <a href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li>
-                        <a href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
 
+            <!--我的故事-->
+            <div id="mystory">
+                <div class="panel panel-default" >
+                    <div class="panel-heading">我的故事</div>
+                    <div id="test">
+                        <div class="panel-body">
+                            <div class="media">
+                                <div class="media-left media-middle">
+                                    <a href="#">
+                                        <img class="media-object" src="..." alt="...">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading">Middle aligned media</h4>
+                                    <span>浏览量:</span><span>点赞量:</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--分页-->
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination" id="eachdata">
+                            <li>
+                                <a href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">5</a></li>
+                            <li>
+                                <a href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!--我点赞过的-->
+            <div id="mylike">
+                <div class="panel panel-default">
+                    <div class="panel-heading">我喜欢的故事</div>
+                    <div id="myLiked">
+                        <div class="panel-body">
+                            <div class="media">
+                                <div class="media-left media-middle">
+                                    <a href="#">
+                                        <img class="media-object" src="..." alt="...">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading">Middle aligned media</h4>
+                                    <span>浏览量:</span><span>点赞量:</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--分页-->
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination" id="eachdataLiked">
+                            <li>
+                                <a href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">5</a></li>
+                            <li>
+                                <a href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <button id="test01" onclick="getLiked()">展示</button>
+            </div>
+
+        </div>
     </div>
-<button id="test01" onclick="getLiked()">test</button>
+</div>
+
+
+
+<div class="container-fluid">
+
 </div>
 
 </body>
 <!--用户信息-->
 <script src="js/userinfo.js" type="text/javascript"></script>
-
+<script src="js/userinfo2.js" type="text/javascript"></script>
 
 </html>
